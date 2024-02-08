@@ -49,13 +49,20 @@ export function initStore() {
 
 export function addNewHistory(newHistory) {
   try {
-    // TODO:
-    /**
-     * - store의 detailList 새로 갱신
-     * - store.currentFunds 새로 갱신
-     */
-    store.detailList = null;
-    store.currentFunds = null;
+    // store의 detailList 새로 갱신, store.currentFunds 새로 갱신
+    console.log("newhistory");
+
+    //todayId가 존재하는지 확인
+    if (store.detailList[todayId]) {
+      //새로운 값으로 기존 값에 재할당
+      store.detailList[todayId] = store.detailList[todayId].push(newHistory);
+    } else {
+      store.detailList[todayId] = [newHistory];
+    }
+
+    // 현재 자산 amount를 재할당
+    store.currentFunds -= newHistory.amount;
+    console.log("store", store);
 
     updateStorage();
     return true;
