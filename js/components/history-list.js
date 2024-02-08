@@ -31,10 +31,10 @@ function reRender() {
 }
 
 export function renderHistoryList() {
-  // TODO: 데이터 매핑
+  // 데이터 매핑
   // TODO: 오름차순으로 목록 나열
-  // TODO: 항목의 시간 포맷 변경: `HH:mm`
-  // TODO: 금액 콤마 포맷 맞추기
+  // 항목의 시간 포맷 변경: `HH:mm`
+  // 금액 콤마 포맷 맞추기
 
   $sectionHistory.innerHTML = store.dateList
     .map(({ date, id: dateId }) => {
@@ -49,6 +49,11 @@ export function renderHistoryList() {
 
       ${detail
         .map(({ description, category, amount, fundAtTheTime, createAt }) => {
+          const time = new Date(createAt).toLocaleTimeString("ko-kr", {
+            timetyle: "short",
+            hourCycle: "h24",
+          });
+
           return `<section class="history-item">
         <section class="history-item-column">
           <div class="create-at">${createAt}</div>
@@ -59,7 +64,7 @@ export function renderHistoryList() {
             <div class="history-detail-row history-detail-subtitle">
               <p>${category}</p>
               <p>
-                ${amount}
+                ${amount.toLocaleString()}
                 <span>원</span>
               </p>
             </div>
@@ -71,7 +76,7 @@ export function renderHistoryList() {
         <section class="history-item-caption">
           <p>
             <span>남은 자산</span>
-            <span>${fundAtTheTime}</span>
+            <span>${fundAtTheTime.toLocaleString()}</span>
             <span>원</span>
           </p>
         </section>
