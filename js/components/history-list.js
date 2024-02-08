@@ -1,5 +1,5 @@
-import { renderCurrentAsset } from "../components/current-asset";
-import { store, removeHistory } from "../store";
+import { renderCurrentAsset } from "../components/current-asset.js";
+import { store, removeHistory } from "../store.js";
 
 const $sectionHistory = document.querySelector(".history");
 
@@ -36,27 +36,25 @@ export function renderHistoryList() {
   // 항목의 시간 포맷 변경: `HH:mm`
   // 금액 콤마 포맷 맞추기
 
+  $sectionHistory.appendChild;
   $sectionHistory.innerHTML = store.dateList
     .map(({ date, id: dateId }) => {
       const detail = store.detailList[dateId];
-      //detail 배열이 존재하지 않으면 아무것도 렌더링 되지 않도록 처리
       if (!detail?.length) return "";
 
-      // ` ` 내부에 js 변수 넣기 -> ${}
-      // 배열을 문자열로 변환 -> join 사용
       return `<article class="history-per-day">
       <p class="history-date">2021년 12월 1일</p>
-
       ${detail
-        .map(({ description, category, amount, fundAtTheTime, createAt }) => {
-          const time = new Date(createAt).toLocaleTimeString("ko-kr", {
-            timetyle: "short",
-            hourCycle: "h24",
-          });
-
-          return `<section class="history-item">
+        .sort((a, b) => b.id - a.id)
+        .map(
+          ({ description, category, amount, fundsAtTheTime, createAt, id }) => {
+            const time = new Date(createAt).toLocaleTimeString("ko-kr", {
+              timeStyle: "short",
+              hourCycle: "h24",
+            });
+            return `<section class="history-item">
         <section class="history-item-column">
-          <div class="create-at">${createAt}</div>
+          <div class="create-at">${time}</div>
           <div class="history-detail">
             <div class="history-detail-row history-detail-title">
               <p>${description}</p>
@@ -70,20 +68,21 @@ export function renderHistoryList() {
             </div>
           </div>
           <div class="delete-section">
-            <button class="delete-button">🗑</button>
+            <button class="delete-button" data-dateid=${dateId} data-itemid=${id}>🗑</button>
           </div>
         </section>
         <section class="history-item-caption">
           <p>
             <span>남은 자산</span>
-            <span>${fundAtTheTime.toLocaleString()}</span>
+            <span>${fundsAtTheTime.toLocaleString()}</span>
             <span>원</span>
           </p>
         </section>
       </section>`;
-        })
+          }
+        )
         .join("")}
-      
+
     </article>`;
     })
     .join("");
